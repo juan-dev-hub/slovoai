@@ -13,36 +13,45 @@ export interface ScriptSections {
   full: string
 }
 
-function parseScriptSections(text: string): ScriptSections {
-  const sectionPatterns = [
-    { key: 'gancho', patterns: ['1. GANCHO', 'GANCHO'] },
-    { key: 'problema', patterns: ['2. PROBLEMA', 'PROBLEMA'] },
-    { key: 'solucion', patterns: ['3. SOLUCIÓN', '3. SOLUCION', 'SOLUCIÓN', 'SOLUCION'] },
-    { key: 'prueba', patterns: ['4. PRUEBA', 'PRUEBA'] },
-    { key: 'oferta', patterns: ['5. OFERTA', 'OFERTA'] },
-    { key: 'cierre', patterns: ['6. CIERRE', 'CIERRE'] },
-    { key: 'manejoObjecion', patterns: ['7. MANEJO DE OBJECIÓN', '7. MANEJO DE OBJECION', 'MANEJO DE OBJECIÓN', 'MANEJO DE OBJECION'] },
-  ]
+// Maps section number to its key
+const SECTION_HEADER_RE = /^[#>*_\s]*(\d+)\s*[.):\-]\s*[*_]*(GANCHO|PROBLEMA|SOLUCIÓN|SOLUCION|PRUEBA|OFERTA|CIERRE|MANEJO\s+DE\s+OBJECIÓN|MANEJO\s+DE\s+OBJECION)[*_\s]*:?\s*$/i
 
+const NUMBER_TO_KEY: Record<string, string> = {
+  '1': 'gancho',
+  '2': 'problema',
+  '3': 'solucion',
+  '4': 'prueba',
+  '5': 'oferta',
+  '6': 'cierre',
+  '7': 'manejoObjecion',
+}
+
+function cleanLine(line: string): string {
+  return line.replace(/^[#>]+\s*/, '').replace(/\*\*/g, '').replace(/^\*/, '').replace(/\*$/, '').trim()
+}
+
+function parseScriptSections(text: string): ScriptSections {
   const lines = text.split('\n')
   const sections: Record<string, string[]> = {}
-  let currentSection = ''
+  let currentKey = ''
 
   for (const line of lines) {
     const trimmed = line.trim()
-    let matched = false
+    if (!trimmed) continue
 
-    for (const { key, patterns } of sectionPatterns) {
-      if (patterns.some(p => trimmed.toUpperCase().includes(p))) {
-        currentSection = key
+    const match = trimmed.match(SECTION_HEADER_RE)
+    if (match) {
+      const key = NUMBER_TO_KEY[match[1]]
+      if (key) {
+        currentKey = key
         sections[key] = []
-        matched = true
-        break
+        continue
       }
     }
 
-    if (!matched && currentSection && trimmed) {
-      sections[currentSection] = [...(sections[currentSection] || []), trimmed]
+    if (currentKey) {
+      const cleaned = cleanLine(trimmed)
+      if (cleaned) sections[currentKey].push(cleaned)
     }
   }
 
