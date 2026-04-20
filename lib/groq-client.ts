@@ -13,8 +13,9 @@ export interface ScriptSections {
   full: string
 }
 
-// Maps section number to its key
-const SECTION_HEADER_RE = /^[#>*_\s]*(\d+)\s*[.):\-]\s*[*_]*(GANCHO|PROBLEMA|SOLUCIÓN|SOLUCION|PRUEBA|OFERTA|CIERRE|MANEJO\s+DE\s+OBJECIÓN|MANEJO\s+DE\s+OBJECION)[*_\s]*:?\s*$/i
+// Matches the header line AND captures any inline content after it
+// e.g. "1. GANCHO", "**1. GANCHO**", "1. GANCHO: texto aquí", "## 1. GANCHO"
+const HEADER_RE = /^[#>\s*_]*(\d+)\s*[.):\-]\s*[*_]*(GANCHO|PROBLEMA|SOLUCIÓN|SOLUCION|PRUEBA|OFERTA|CIERRE|MANEJO\s+DE\s+OBJECIÓN|MANEJO\s+DE\s+OBJECION)\b[*_\s]*:?\s*/i
 
 const NUMBER_TO_KEY: Record<string, string> = {
   '1': 'gancho',
@@ -26,31 +27,35 @@ const NUMBER_TO_KEY: Record<string, string> = {
   '7': 'manejoObjecion',
 }
 
-function cleanLine(line: string): string {
-  return line.replace(/^[#>]+\s*/, '').replace(/\*\*/g, '').replace(/^\*/, '').replace(/\*$/, '').trim()
+function stripMarkdown(s: string): string {
+  return s.replace(/\*\*/g, '').replace(/^[#>*_\-]+\s*/, '').trim()
 }
 
 function parseScriptSections(text: string): ScriptSections {
-  const lines = text.split('\n')
+  console.log('[Groq raw output]', text.slice(0, 300))
+
   const sections: Record<string, string[]> = {}
   let currentKey = ''
 
-  for (const line of lines) {
+  for (const line of text.split('\n')) {
     const trimmed = line.trim()
     if (!trimmed) continue
 
-    const match = trimmed.match(SECTION_HEADER_RE)
+    const match = trimmed.match(HEADER_RE)
     if (match) {
       const key = NUMBER_TO_KEY[match[1]]
       if (key) {
         currentKey = key
         sections[key] = []
+        // capture any content written inline after the header title
+        const inline = trimmed.slice(match[0].length).trim()
+        if (inline) sections[key].push(stripMarkdown(inline))
         continue
       }
     }
 
     if (currentKey) {
-      const cleaned = cleanLine(trimmed)
+      const cleaned = stripMarkdown(trimmed)
       if (cleaned) sections[currentKey].push(cleaned)
     }
   }
@@ -97,7 +102,14 @@ Información del producto:
 - Canal de venta: ${inputs.canal}
 - Objeción principal del cliente: ${inputs.objecion}
 
-Genera el script completo con los 7 puntos numerados y títulos en mayúsculas. Formato obligatorio: 1. GANCHO, 2. PROBLEMA, 3. SOLUCIÓN, 4. PRUEBA, 5. OFERTA, 6. CIERRE, 7. MANEJO DE OBJECIÓN`
+Genera el script completo con los 7 puntos numerados y títulos en mayúsculas. Formato ESTRICTO — cada sección debe comenzar en su propia línea exactamente así:
+1. GANCHO
+2. PROBLEMA
+3. SOLUCIÓN
+4. PRUEBA
+5. OFERTA
+6. CIERRE
+7. MANEJO DE OBJECIÓN`
 
   const completion = await groq.chat.completions.create({
     model: 'llama-3.3-70b-versatile',
