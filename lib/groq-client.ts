@@ -106,95 +106,80 @@ export async function generateSalesScript(inputs: {
       ? 'Nivel de hype moderado: energía controlada, alguna emoción pero basada en datos.'
       : 'Nivel de hype alto: energía máxima, urgencia real, lenguaje de oportunidad única.'
 
-  const prompt = `Eres un copywriter élite especializado en ventas agresivas estilo Hormozi adaptado a mercados escépticos como cripto.
+  const prompt = `Eres un vendedor de élite y copywriter estilo Alex Hormozi. Tu trabajo es escribir scripts de venta reales, persuasivos y completamente personalizados con la información del usuario.
 
-Tu tarea es generar un script de ventas que convierta.
-
-REGLAS CRÍTICAS (OBLIGATORIAS):
-- Usa frases cortas (máx 12 palabras por línea)
-- Escribe en formato de líneas separadas (no párrafos largos)
-- Evita frases genéricas tipo: "no es una promesa", "tenemos clientes", "solución innovadora"
-- No uses lenguaje de IA, marketing cliché o relleno
-- Mantén tono directo, incómodo y seguro
-- Prioriza claridad sobre creatividad
-- El lector tiene baja atención (máx 3 segundos para enganchar)
+DATOS DEL PRODUCTO (ÚSALOS EN CADA SECCIÓN — NO INVENTES NI GENERALICES):
+- Producto: ${inputs.producto}
+- Cliente ideal: ${inputs.nicho}
+- Problema que resuelve: ${inputs.problema}
+- Resultado concreto: ${inputs.resultado}
+- Precio: ${inputs.precio}
+- Canal: ${inputs.canal}
 
 PARÁMETROS DE ESTILO:
 - Tono: ${inputs.tono} — ${tonoDesc}
-- Nivel de hype (${inputs.nivelHype}/10): ${hypeNote}
+- Nivel de hype ${inputs.nivelHype}/10: ${hypeNote}
 - Tipo de cliente: ${inputs.tipoCliente} — ${clienteDesc}
 
-ESTRUCTURA EXACTA:
+REGLAS DE ESCRITURA:
+- Cada línea completa una idea. No cortes ideas a la mitad.
+- Escribe oraciones reales, no listas de 2 palabras.
+- Usa el nombre del producto, el nicho y el resultado específico en cada sección.
+- Nada genérico. Si algo puede aplicar a cualquier producto, reescríbelo con los datos reales.
+- Tono directo, conversacional, como si lo dijera un vendedor top en ${inputs.canal}.
+- No uses emojis, no uses asteriscos, no uses markdown.
+
+ESTRUCTURA (escribe cada sección con al menos 4-6 líneas de contenido real):
 
 1. GANCHO
-- Debe ser incómodo o confrontativo
-- Ataca una creencia falsa o resultado pobre
-- Máximo 3 líneas
+Empieza con una pregunta incómoda o una afirmación que confronte al cliente ideal (${inputs.nicho}) directamente.
+Ataca la creencia falsa que tiene sobre ${inputs.problema}.
+Haz que sienta que lo que ha estado haciendo está mal o es ineficiente.
 
 2. PROBLEMA
-- Rompe falsas creencias
-- Explica por qué está fallando realmente
-- 3-5 líneas cortas
+Explica con detalle por qué ${inputs.nicho} sigue teniendo el problema a pesar de haber intentado otras cosas.
+Habla del dolor real de no resolver ${inputs.problema}.
+Sé específico sobre las consecuencias de no actuar.
 
 3. SOLUCIÓN
-- Explica qué hace el producto SIN hype vacío
-- Enfocado en mecanismo, no buzzwords
-- 3-5 líneas
+Explica cómo ${inputs.producto} resuelve ${inputs.problema} de manera concreta.
+Describe el mecanismo real: qué hace diferente, cómo funciona, por qué funciona donde otros fallan.
+No uses términos vacíos. Di exactamente qué ocurre cuando el cliente usa ${inputs.producto}.
 
 4. PRUEBA
-- Usa ejemplos creíbles (evita números exagerados)
-- Si no hay datos reales, usa lógica clara
-- 2-4 líneas
+Presenta evidencia lógica o ejemplos creíbles de que ${inputs.producto} entrega ${inputs.resultado}.
+Si no tienes casos reales, usa lógica de causa-efecto concreta.
+Conecta el mecanismo de la solución con el resultado prometido.
 
 5. OFERTA
-- Precio claro
-- Incluye riesgo inverso o condición fuerte si es posible
-- 2-3 líneas
+El precio es ${inputs.precio}. Justifica ese precio en función del valor de obtener ${inputs.resultado}.
+Compara el costo de NO resolver ${inputs.problema} vs. invertir en ${inputs.producto}.
+Si aplica, menciona condición de urgencia o garantía.
 
 6. CIERRE
-- Directo, sin emoción falsa
-- Llamado a acción simple
-- 2 líneas máximo
+Dile al cliente exactamente qué hacer ahora mismo a través de ${inputs.canal}.
+Una sola instrucción clara. Sin rodeos, sin emoción falsa.
 
 7. OBJECIONES
-Para cada objeción listada abajo, genera una respuesta estilo línea recta Jordan Belfort.
-Cada respuesta: máximo 2 líneas, tipo golpe, sin explicar de más.
-Después de responder cada objeción, agrega un remate de cierre de una línea que regrese al prospecto al track.
-Formato por objeción:
-[Objeción X]: <texto de la objeción>
-Respuesta: <respuesta directa>
-Remate: <línea de regreso al track>
+Para cada objeción, escribe una respuesta directa que no pida disculpas ni explique de más.
+Luego un remate que regrese al cliente al sí.
+Formato exacto:
 
-FORMATO DE SALIDA:
-- Usa títulos numerados (1. GANCHO, 2. PROBLEMA, etc.)
-- No uses emojis
-- No uses párrafos largos
-- Todo debe ser escaneable en segundos
+[Objeción]: <texto de la objeción>
+Respuesta: <respuesta directa de 1-2 oraciones usando el producto y resultado>
+Remate: <una línea que vuelva a enfocar al cliente en el resultado>
 
-INPUT DEL USUARIO:
-Producto: ${inputs.producto}
-Nicho: ${inputs.nicho}
-Problema: ${inputs.problema}
-Resultado: ${inputs.resultado}
-Precio: ${inputs.precio}
-Canal: ${inputs.canal}
-Objeciones a manejar:
+Objeciones a responder:
 ${objecionesFormateadas}
 
-Genera el script ahora.
-ANTES de escribir:
-- Identifica el dolor real (no superficial)
-- Elimina cualquier frase que suene genérica
-- Reduce cada bloque a lo mínimo necesario
-
-SI suena como algo que cualquiera podría decir:
-→ reescríbelo más específico o más directo`
+---
+Escribe el script completo ahora. Usa los datos reales del producto en cada sección. No escribas placeholders ni frases genéricas.`
 
   const completion = await groq.chat.completions.create({
     model: 'llama-3.3-70b-versatile',
     messages: [{ role: 'user', content: prompt }],
-    temperature: 0.85,
-    max_tokens: 3500,
+    temperature: 0.8,
+    max_tokens: 4000,
   })
 
   const text = completion.choices[0]?.message?.content || ''
