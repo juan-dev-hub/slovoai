@@ -23,6 +23,7 @@ interface GeneratedScript {
   oferta: string
   cierre: string
   manejoObjecion: string
+  versionHablada: string
   full: string
 }
 

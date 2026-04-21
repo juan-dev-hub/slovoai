@@ -14,6 +14,7 @@ interface ScriptData {
   oferta: string
   cierre: string
   manejoObjecion: string
+  versionHablada: string
   full: string
 }
 
@@ -24,13 +25,14 @@ interface ScriptDisplayProps {
 }
 
 const SECTIONS = [
-  { key: 'gancho', label: 'GANCHO', emoji: '⚡', free: true },
-  { key: 'problema', label: 'PROBLEMA', emoji: '🎯', free: true },
-  { key: 'solucion', label: 'SOLUCIÓN', emoji: '💡', free: false },
-  { key: 'prueba', label: 'PRUEBA', emoji: '📊', free: false },
-  { key: 'oferta', label: 'OFERTA', emoji: '💰', free: false },
-  { key: 'cierre', label: 'CIERRE', emoji: '🔥', free: false },
-  { key: 'manejoObjecion', label: 'MANEJO DE OBJECIÓN', emoji: '🛡️', free: false },
+  { key: 'gancho',         label: 'GANCHO',             emoji: '⚡', free: true  },
+  { key: 'problema',       label: 'PROBLEMA',            emoji: '🎯', free: true  },
+  { key: 'solucion',       label: 'SOLUCIÓN',            emoji: '💡', free: false },
+  { key: 'prueba',         label: 'PRUEBA',              emoji: '📊', free: false },
+  { key: 'oferta',         label: 'OFERTA',              emoji: '💰', free: false },
+  { key: 'cierre',         label: 'CIERRE',              emoji: '🔥', free: false },
+  { key: 'manejoObjecion', label: 'MANEJO DE OBJECIÓN',  emoji: '🛡️', free: false },
+  { key: 'versionHablada', label: 'VERSIÓN HABLADA',     emoji: '🗣️', free: false },
 ]
 
 export function ScriptDisplay({ script, credits, onUnlocked }: ScriptDisplayProps) {

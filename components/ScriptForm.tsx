@@ -15,6 +15,9 @@ interface FormData {
   tono: string
   nivelHype: number
   tipoCliente: string
+  prueba: string
+  garantia: string
+  urgencia: string
 }
 
 interface ScriptFormProps {
@@ -62,6 +65,9 @@ export function ScriptForm({ onScriptGenerated }: ScriptFormProps) {
     tono: '',
     nivelHype: 5,
     tipoCliente: '',
+    prueba: '',
+    garantia: '',
+    urgencia: '',
   })
   const [objeciones, setObjeciones] = useState<string[]>([''])
   const [loading, setLoading] = useState(false)
@@ -116,7 +122,13 @@ export function ScriptForm({ onScriptGenerated }: ScriptFormProps) {
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, objeciones: validObjeciones }),
+        body: JSON.stringify({
+          ...form,
+          objeciones: validObjeciones,
+          prueba: form.prueba.trim(),
+          garantia: form.garantia.trim(),
+          urgencia: form.urgencia.trim(),
+        }),
       })
 
       const data = await res.json()
@@ -254,6 +266,42 @@ export function ScriptForm({ onScriptGenerated }: ScriptFormProps) {
               />
               <span className="text-xs text-white/40">10</span>
             </div>
+          </motion.div>
+
+          {/* Campos opcionales */}
+          <motion.div variants={itemVariants} className="md:col-span-2">
+            <div className="h-px bg-white/10 mb-5 mt-1" />
+            <p className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-4">
+              Datos opcionales — mejoran la sección de Prueba y Cierre
+            </p>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="md:col-span-2">
+            <Textarea
+              label="Prueba social o dato real (opcional)"
+              placeholder="Ej: María perdió 8kg en 6 semanas. O: el 73% de nuestros clientes renueva."
+              value={form.prueba}
+              onChange={set('prueba')}
+              rows={2}
+            />
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <Input
+              label="Garantía (opcional)"
+              placeholder="Ej: 30 días de devolución sin preguntas"
+              value={form.garantia}
+              onChange={set('garantia')}
+            />
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <Input
+              label="Urgencia o escasez (opcional)"
+              placeholder="Ej: Solo 10 cupos este mes"
+              value={form.urgencia}
+              onChange={set('urgencia')}
+            />
           </motion.div>
 
           {/* Objeciones dinámicas */}

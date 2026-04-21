@@ -25,6 +25,13 @@ function sanitizeText(value: unknown): string | null {
   return trimmed.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
 }
 
+function sanitizeOptional(value: unknown): string {
+  if (typeof value !== 'string') return ''
+  const trimmed = value.trim()
+  if (trimmed.length > MAX_FIELD_LENGTH) return ''
+  return trimmed.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+}
+
 export async function POST(req: NextRequest) {
   const { userId } = auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -80,13 +87,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Objeciones inválidas o vacías' }, { status: 400 })
     }
 
+    const prueba    = sanitizeOptional(body.prueba)
+    const garantia  = sanitizeOptional(body.garantia)
+    const urgencia  = sanitizeOptional(body.urgencia)
+
     if (!producto || !nicho || !problema || !resultado || !precio || !canal || !tono || nivelHype === null || !tipoCliente) {
       return NextResponse.json({ error: 'Campos inválidos o faltantes' }, { status: 400 })
     }
 
     const sections = await generateSalesScript({
       producto, nicho, problema, resultado, precio, canal,
-      objeciones, tono, nivelHype, tipoCliente,
+      objeciones, prueba, garantia, urgencia, tono, nivelHype, tipoCliente,
     })
 
     const script = await saveScript({
@@ -111,6 +122,7 @@ export async function POST(req: NextRequest) {
       oferta: sections.oferta,
       cierre: sections.cierre,
       manejoObjecion: sections.manejoObjecion,
+      versionHablada: sections.versionHablada,
       full: sections.full,
     })
   } catch (err) {
