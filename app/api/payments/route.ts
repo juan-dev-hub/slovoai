@@ -6,9 +6,9 @@ import crypto from 'crypto'
 
 type Provider = 'nowpayments' | 'moonpay' | 'helio'
 
-function buildNowPaymentsUrl(pkg: typeof CREDIT_PACKAGES[number], userId: string, appUrl: string) {
+async function buildNowPaymentsUrl(pkg: typeof CREDIT_PACKAGES[number], userId: string, appUrl: string) {
   const orderId = `${userId}|${pkg.credits}|${Date.now()}`
-  return fetch('https://api.nowpayments.io/v1/invoice', {
+  const r = await fetch('https://api.nowpayments.io/v1/invoice', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.NOWPAYMENTS_API_KEY! },
     body: JSON.stringify({
@@ -23,26 +23,27 @@ function buildNowPaymentsUrl(pkg: typeof CREDIT_PACKAGES[number], userId: string
       is_fee_paid_by_user: false,
     }),
   })
-    .then(r => r.json())
-    .then(data => {
-      if (!data.invoice_url) throw new Error('NowPayments no retornó URL')
-      return data.invoice_url as string
-    })
+  const data = await r.json()
+  if (!data.invoice_url) throw new Error('NowPayments no retornó URL')
+  return data.invoice_url as string
 }
 
 function buildMoonPayUrl(pkg: typeof CREDIT_PACKAGES[number], userId: string, appUrl: string) {
-  const pubKey = process.env.MOONPAY_PUBLISHABLE_KEY!
-  const secretKey = process.env.MOONPAY_SECRET_KEY!
-  const orderId = `${userId}|${pkg.credits}|${Date.now()}`
+  const pubKey = process.env.MOONPAY_PUBLISHABLE_KEY
+  const secretKey = process.env.MOONPAY_SECRET_KEY
+  if (!pubKey || !secretKey) throw new Error('MoonPay: faltan MOONPAY_PUBLISHABLE_KEY o MOONPAY_SECRET_KEY en Vercel')
 
+  const orderId = `${userId}|${pkg.credits}|${Date.now()}`
   const params = new URLSearchParams({
     apiKey: pubKey,
     currencyCode: 'usdc_sol',
     baseCurrencyAmount: String(pkg.price),
     externalTransactionId: orderId,
     redirectURL: `${appUrl}/dashboard?payment=success`,
-    walletAddress: process.env.MOONPAY_WALLET_ADDRESS || '',
   })
+
+  const walletAddress = process.env.MOONPAY_WALLET_ADDRESS
+  if (walletAddress) params.set('walletAddress', walletAddress)
 
   const signature = crypto
     .createHmac('sha256', secretKey)
@@ -54,7 +55,9 @@ function buildMoonPayUrl(pkg: typeof CREDIT_PACKAGES[number], userId: string, ap
 }
 
 function buildHelioUrl(pkg: typeof CREDIT_PACKAGES[number], userId: string, appUrl: string) {
-  const paylinkId = process.env.HELIO_PAYLINK_ID!
+  const paylinkId = process.env.HELIO_PAYLINK_ID
+  if (!paylinkId) throw new Error('Helio: falta HELIO_PAYLINK_ID en Vercel')
+
   const params = new URLSearchParams({
     amount: String(pkg.price),
     'custom-data': `${userId}|${pkg.credits}`,
