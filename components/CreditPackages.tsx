@@ -54,7 +54,7 @@ export function CreditPackages({ onSuccess }: CreditPackagesProps) {
           <button
             key={p.id}
             onClick={() => setProvider(p.id)}
-            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 text-center ${
+            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 text-center relative ${
               provider === p.id
                 ? 'bg-white/15 text-white shadow'
                 : 'text-white/50 hover:text-white/80'
@@ -62,6 +62,11 @@ export function CreditPackages({ onSuccess }: CreditPackagesProps) {
           >
             <div>{p.label}</div>
             <div className="text-xs opacity-60 mt-0.5">{p.desc}</div>
+            {p.id === 'moonpay' && (
+              <span className="block text-[10px] font-semibold text-yellow-400/90 mt-0.5">
+                Disponible pronto
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -109,10 +114,11 @@ export function CreditPackages({ onSuccess }: CreditPackagesProps) {
               <Button
                 onClick={() => handlePurchase(pkg.credits)}
                 loading={loading === pkg.credits}
+                disabled={provider === 'moonpay'}
                 className="w-full"
                 variant={'popular' in pkg && pkg.popular ? 'primary' : 'secondary'}
               >
-                Comprar
+                {provider === 'moonpay' ? 'Próximamente' : 'Comprar'}
               </Button>
             </Card>
           </motion.div>
