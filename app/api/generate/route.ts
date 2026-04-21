@@ -12,13 +12,16 @@ const ALLOWED_CANALES = [
   'cara a cara',
 ]
 
+const ALLOWED_TONOS = ['agresivo', 'medio', 'suave']
+const ALLOWED_CLIENTES = ['escéptico', 'degen', 'corporativo']
+
 const MAX_FIELD_LENGTH = 500
+const MAX_OBJECIONES = 10
 
 function sanitizeText(value: unknown): string | null {
   if (typeof value !== 'string') return null
   const trimmed = value.trim()
   if (!trimmed || trimmed.length > MAX_FIELD_LENGTH) return null
-  // Strip null bytes and control characters
   return trimmed.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
 }
 
@@ -45,18 +48,47 @@ export async function POST(req: NextRequest) {
     const problema  = sanitizeText(body.problema)
     const resultado = sanitizeText(body.resultado)
     const precio    = sanitizeText(body.precio)
-    const objecion  = sanitizeText(body.objecion)
     const canal     = typeof body.canal === 'string' && ALLOWED_CANALES.includes(body.canal.trim())
       ? body.canal.trim()
       : null
 
-    if (!producto || !nicho || !problema || !resultado || !precio || !canal || !objecion) {
+    const tono = typeof body.tono === 'string' && ALLOWED_TONOS.includes(body.tono.trim())
+      ? body.tono.trim()
+      : null
+
+    const nivelHype = typeof body.nivelHype === 'number' && body.nivelHype >= 0 && body.nivelHype <= 10
+      ? Math.round(body.nivelHype)
+      : null
+
+    const tipoCliente = typeof body.tipoCliente === 'string' && ALLOWED_CLIENTES.includes(body.tipoCliente.trim())
+      ? body.tipoCliente.trim()
+      : null
+
+    if (!Array.isArray(body.objeciones) || body.objeciones.length === 0) {
+      return NextResponse.json({ error: 'Debes ingresar al menos una objeción' }, { status: 400 })
+    }
+    if (body.objeciones.length > MAX_OBJECIONES) {
+      return NextResponse.json({ error: `Máximo ${MAX_OBJECIONES} objeciones permitidas` }, { status: 400 })
+    }
+
+    const objeciones: string[] = []
+    for (const raw of body.objeciones) {
+      const clean = sanitizeText(raw)
+      if (clean) objeciones.push(clean)
+    }
+    if (objeciones.length === 0) {
+      return NextResponse.json({ error: 'Objeciones inválidas o vacías' }, { status: 400 })
+    }
+
+    if (!producto || !nicho || !problema || !resultado || !precio || !canal || !tono || nivelHype === null || !tipoCliente) {
       return NextResponse.json({ error: 'Campos inválidos o faltantes' }, { status: 400 })
     }
 
-    const sections = await generateSalesScript({ producto, nicho, problema, resultado, precio, canal, objecion })
+    const sections = await generateSalesScript({
+      producto, nicho, problema, resultado, precio, canal,
+      objeciones, tono, nivelHype, tipoCliente,
+    })
 
-    // Save full script server-side — client never sends content back
     const script = await saveScript({
       usuarioId: userId,
       producto,
@@ -65,7 +97,7 @@ export async function POST(req: NextRequest) {
       resultado,
       precio,
       canal,
-      objecion,
+      objecion: objeciones.join(' | '),
       scriptCompleto: sections.full,
       desbloqueado: false,
     })
