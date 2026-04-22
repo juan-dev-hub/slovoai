@@ -18,6 +18,12 @@ export function Navbar({ credits }: NavbarProps) {
     { href: '/referidos', label: 'Referidos' },
   ]
 
+  const legalLinks = [
+    { href: '/conditions', label: 'Términos' },
+    { href: '/privacy', label: 'Privacidad' },
+    { href: '/refunds', label: 'Reembolsos' },
+  ]
+
   return (
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
@@ -61,6 +67,22 @@ export function Navbar({ credits }: NavbarProps) {
                 </Link>
               ))}
             </SignedIn>
+
+            <div className="w-px h-4 bg-white/20 mx-2" />
+
+            {legalLinks.map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`px-3 py-1.5 rounded-lg text-xs transition-all duration-200 ${
+                  pathname === link.href
+                    ? 'text-white/80'
+                    : 'text-white/30 hover:text-white/60'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           <div className="flex items-center gap-3">
