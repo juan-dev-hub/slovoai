@@ -83,6 +83,7 @@ export function ScriptDisplay({ script, credits, onUnlocked }: ScriptDisplayProp
         { title: '5. OFERTA', content: script.oferta },
         { title: '6. CIERRE', content: script.cierre },
         { title: '7. MANEJO DE OBJECIÓN', content: script.manejoObjecion },
+        { title: '8. VERSIÓN HABLADA', content: script.versionHablada },
       ]
 
       for (const section of sections) {

@@ -15,7 +15,7 @@ export interface ScriptSections {
 }
 
 // Matches section headers with or without leading number, bold/markdown variants
-const HEADER_RE = /^[#*>\s_]*(?:\d+[.):\-]\s*)?[*_]*(GANCHO|PROBLEMA|SOLUC[IÍ]ON|PRUEBA|OFERTA|CIERRE|OBJECIONES|MANEJO\s+(?:DE\s+)?OBJECCI[OÓ]N)[*_\s]*:?$/i
+const HEADER_RE = /^[#*>\s_]*(?:\d+[.):\-]\s*)?[*_]*(GANCHO|PROBLEMA|SOLUC[IÍ][OÓ]N|PRUEBA|OFERTA|CIERRE|OBJECIONES|MANEJO\s+(?:DE\s+)?OBJECCI[OÓ]N)[*_\s]*:?$/i
 
 const KEYWORD_TO_KEY: Record<string, string> = {
   gancho: 'gancho',
@@ -215,40 +215,40 @@ REGLAS DE ESCRITURA — NO NEGOCIABLES
 ════════════════════════════════════
 
 FORMATO:
-- Cada línea: máximo 12 palabras
-- Máximo 5 líneas por sección
-- Sin párrafos. Sin bloques largos.
-- Saltos de línea constantes.
-- Títulos numerados exactos (1. GANCHO, 2. PROBLEMA, etc.)
-- Sin emojis
+- Cada línea es una oración completa. Sujeto + verbo + contexto específico.
+- NUNCA escribas fragmentos de 2 o 3 palabras como "Pierdes dinero" o "No tienes opciones". Eso no es copy, es un borrador.
+- Máximo 12 palabras por línea. Mínimo 6.
+- Entre 3 y 5 líneas por sección.
+- Cada línea va separada por salto de línea.
+- Títulos numerados exactos: 1. GANCHO, 2. PROBLEMA, etc.
+- Sin emojis.
+
+EJEMPLO DE LO QUE NO DEBES HACER:
+MAL → "Pierdes dinero con bancos"
+MAL → "No sabes de criptomonedas"
+MAL → "Perdes oportunidades"
+
+EJEMPLO DE LO QUE SÍ DEBES HACER:
+BIEN → "Tu banco te cobra por guardar dinero que pierde valor solo."
+BIEN → "Mientras no entiendes cripto, alguien más está ganando lo que tú estás dejando ir."
+BIEN → "El problema no es el dinero. Es que no sabes dónde moverlo."
 
 TONO:
-- Directo
-- Seguro
-- Como alguien que ya vendió esto antes
-- Sin introducciones tipo "oye", "mira", "escucha"
-- Sin lenguaje emocional genérico
+- Directo, como vendedor real que ya lo vendió antes.
+- Sin introducciones vacías.
+- Sin lenguaje emocional genérico.
+- Usa los datos reales del producto en cada línea.
 
-PROHIBIDO escribir:
-- "no es una promesa"
-- "tenemos clientes satisfechos"
-- "solución innovadora"
-- "científicamente probado"
-- Cualquier frase que cualquier marketer diría
+PROHIBIDO:
+- Frases de 2-3 palabras sueltas
+- "no es una promesa" / "solución innovadora" / "científicamente probado"
+- Cualquier línea que suene a lista de keywords
 
-════════════════════════════════════
-VALIDACIÓN — OBLIGATORIA ANTES DE ENTREGAR
-════════════════════════════════════
-
-Revisa línea por línea:
-
-¿Alguna línea tiene más de 12 palabras? → Recórtala.
-¿Hay frases genéricas? → Elimínalas o reescríbelas.
-¿Suena como IA o marketer? → Hazlo más específico.
-¿Hay párrafos? → Divídelos.
-¿Cada sección se lee en menos de 3 segundos? → Si no, simplifica.
-
-SI NO CUMPLE TODO → NO ENTREGUES → REESCRIBE.
+VALIDACIÓN antes de entregar:
+¿Alguna línea tiene menos de 6 palabras? → Amplíala con contexto real.
+¿Suena a keywords sueltas? → Conviértelas en oración.
+¿Podría aplicar a cualquier producto? → Reescríbela con el nombre y datos del producto.
+SI NO CUMPLE → REESCRIBE.
 
 ════════════════════════════════════
 OUTPUT FINAL — DOS VERSIONES
