@@ -30,6 +30,7 @@ interface ScriptFormProps {
     oferta: string
     cierre: string
     manejoObjecion: string
+    versionHablada: string
     full: string
   }) => void
 }
