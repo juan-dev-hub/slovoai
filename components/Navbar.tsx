@@ -68,16 +68,16 @@ export function Navbar({ credits }: NavbarProps) {
               ))}
             </SignedIn>
 
-            <div className="w-px h-4 bg-white/20 mx-2" />
+            <div className="w-px h-4 bg-white/20 mx-3" />
 
             {legalLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-1.5 rounded-lg text-xs transition-all duration-200 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
                   pathname === link.href
-                    ? 'text-white/80'
-                    : 'text-white/30 hover:text-white/60'
+                    ? 'bg-white/15 text-white'
+                    : 'text-white/60 hover:text-white hover:bg-white/10'
                 }`}
               >
                 {link.label}

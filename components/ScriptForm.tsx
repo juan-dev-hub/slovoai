@@ -157,7 +157,7 @@ export function ScriptForm({ onScriptGenerated }: ScriptFormProps) {
       <motion.div variants={containerVariants} initial="hidden" animate="visible">
         <motion.div variants={itemVariants} className="mb-8">
           <h2 className="text-2xl font-bold text-white mb-2">Genera tu script de ventas</h2>
-          <p className="text-white/60 text-sm">Llena los campos y la IA generará un script estilo Hormozi personalizado para ti.</p>
+          <p className="text-white/60 text-sm">Llena los campos y la IA generará un script de ventas personalizado para ti.</p>
         </motion.div>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">

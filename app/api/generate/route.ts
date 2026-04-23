@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { generateSalesScript } from '@/lib/groq-client'
+import { generateSalesScript } from '@/lib/gemini-client'
 import { getUser, saveScript } from '@/lib/db'
 import { checkRateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 

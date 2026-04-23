@@ -43,7 +43,7 @@ export function ScriptHistory({ scripts, credits, onCreditUsed }: ScriptHistoryP
 
       doc.setFontSize(22)
       doc.setTextColor(0, 198, 255)
-      doc.text('SCRIPT DE VENTAS — ESTILO HORMOZI', pageWidth / 2, y, { align: 'center' })
+      doc.text('SCRIPT DE VENTAS', pageWidth / 2, y, { align: 'center' })
       y += 12
 
       doc.setFontSize(11)

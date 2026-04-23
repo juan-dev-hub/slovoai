@@ -14,8 +14,8 @@ export function Footer() {
               SLOVO AI
             </span>
             <p className="text-white/40 text-sm mt-2 leading-relaxed">
-              Genera scripts de ventas de alto impacto con inteligencia artificial.
-              Método Alex Hormozi, adaptado a tu producto.
+              Genera scripts de ventas de alto impacto con inteligencia artificial,
+              adaptados a tu producto.
             </p>
           </div>
 

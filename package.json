@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.2",
+    "@google/generative-ai": "^0.24.1",
     "@neondatabase/serverless": "^0.10.1",
     "framer-motion": "^11.13.1",
-    "groq-sdk": "^0.8.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.2",
     "next": "14.2.20",

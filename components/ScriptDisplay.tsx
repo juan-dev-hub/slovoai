@@ -67,7 +67,7 @@ export function ScriptDisplay({ script, credits, onUnlocked }: ScriptDisplayProp
 
       doc.setFontSize(22)
       doc.setTextColor(0, 198, 255)
-      doc.text('SCRIPT DE VENTAS — ESTILO HORMOZI', pageWidth / 2, y, { align: 'center' })
+      doc.text('SCRIPT DE VENTAS', pageWidth / 2, y, { align: 'center' })
       y += 12
 
       doc.setFontSize(11)
@@ -115,7 +115,7 @@ export function ScriptDisplay({ script, credits, onUnlocked }: ScriptDisplayProp
         y += 8
       }
 
-      doc.save('script-ventas-hormozi.pdf')
+      doc.save('script-ventas.pdf')
     } catch (err) {
       console.error(err)
     } finally {

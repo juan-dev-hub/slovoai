@@ -7,9 +7,9 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'SLOVO AI — Genera Scripts de Ventas Estilo Hormozi',
-  description: 'Genera scripts de ventas de alto impacto con IA. Método Alex Hormozi. Llena 7 campos y obtén tu script personalizado.',
-  keywords: 'scripts de ventas, Alex Hormozi, IA, ventas, copywriting',
+  title: 'SLOVO AI — Genera Scripts de Ventas con IA',
+  description: 'Genera scripts de ventas de alto impacto con IA. Llena los campos y obtén tu script personalizado.',
+  keywords: 'scripts de ventas, IA, ventas, copywriting',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

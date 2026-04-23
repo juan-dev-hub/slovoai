@@ -21,7 +21,7 @@ const fadeUp = {
 }
 
 const FEATURES = [
-  { emoji: '⚡', title: 'Scripts en segundos', desc: 'La IA genera tu script completo estilo Hormozi en menos de 30 segundos.' },
+  { emoji: '⚡', title: 'Scripts en segundos', desc: 'La IA genera tu script de ventas completo en menos de 30 segundos.' },
   { emoji: '🎯', title: '7 secciones estratégicas', desc: 'Gancho, Problema, Solución, Prueba, Oferta, Cierre y Manejo de Objeción.' },
   { emoji: '📥', title: 'PDF descargable', desc: 'Descarga tu script en PDF listo para usar. Redescargas gratis para siempre.' },
   { emoji: '🔗', title: 'Programa de referidos', desc: 'Comparte tu link y gana 20% en créditos cada vez que alguien compra.' },
@@ -30,7 +30,7 @@ const FEATURES = [
 const TESTIMONIALS = [
   { name: 'Carlos M.', role: 'Consultor de negocios', text: 'Cerré 3 clientes nuevos la primera semana usando el script. El gancho es brutal.' },
   { name: 'Ana P.', role: 'Coach de ventas', text: 'Mis alumnos quedaron impactados. El script tiene la estructura exacta que yo enseño.' },
-  { name: 'Diego F.', role: 'Agencia de marketing', text: 'Lo uso para cada cliente nuevo. En serio, es como tener a Hormozi en el equipo.' },
+  { name: 'Diego F.', role: 'Agencia de marketing', text: 'Lo uso para cada cliente nuevo. En serio, los scripts cierran solos.' },
 ]
 
 const TYPEWRITER_LINES = [
@@ -175,7 +175,7 @@ export default function LandingPage() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-electric/10 border border-electric/30 text-electric text-sm font-medium mb-8"
         >
           <span className="w-2 h-2 rounded-full bg-electric animate-pulse" />
-          Powered by Groq + Llama 3.3 70B
+          Powered by Gemini 2.0 Flash
         </motion.div>
 
         <motion.h1
