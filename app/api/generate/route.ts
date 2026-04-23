@@ -125,8 +125,8 @@ export async function POST(req: NextRequest) {
       versionHablada: sections.versionHablada,
       full: sections.full,
     })
-  } catch (err) {
-    console.error(err)
-    return NextResponse.json({ error: 'Error generando script' }, { status: 500 })
+  } catch (err: any) {
+    console.error('[generate error]', err)
+    return NextResponse.json({ error: err?.message || 'Error generando script' }, { status: 500 })
   }
 }
