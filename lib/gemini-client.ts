@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai'
+import { GoogleGenAI } from '@google/genai'
 
 export interface ScriptSections {
   gancho: string
@@ -180,22 +180,23 @@ REGLA CRÍTICA: NUNCA digas que un competidor es malo, estafa, timo, o ilegal. S
 VERSIÓN 2: VERSIÓN HABLADA
 El script completo en lenguaje conversacional real. Como si estuvieras en una llamada o cara a cara. Fluido, con pausas marcadas con [pausa]. Incluye las 3 preguntas de rapport, apertura, presentación, prueba, manejo de cada objeción y cierre duro. El vendedor debe poder leerlo y decir: "así es exactamente como yo hablaría."`
 
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    safetySettings: [
-      { category: HarmCategory.HARM_CATEGORY_HARASSMENT,        threshold: HarmBlockThreshold.BLOCK_NONE },
-      { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,       threshold: HarmBlockThreshold.BLOCK_NONE },
-      { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
-      { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
-    ],
-    generationConfig: {
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
+
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.0-flash',
+    contents: prompt,
+    config: {
       temperature: 0.8,
       maxOutputTokens: 4500,
+      safetySettings: [
+        { category: 'HARM_CATEGORY_HARASSMENT',        threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_HATE_SPEECH',       threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' },
+      ],
     },
   })
 
-  const result = await model.generateContent(prompt)
-  const text = result.response.text()
+  const text = response.text ?? ''
   return parseScriptSections(text)
 }
