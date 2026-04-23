@@ -1,7 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-
 export interface ScriptSections {
   gancho: string
   problema: string
@@ -182,6 +180,7 @@ REGLA CRÍTICA: NUNCA digas que un competidor es malo, estafa, timo, o ilegal. S
 VERSIÓN 2: VERSIÓN HABLADA
 El script completo en lenguaje conversacional real. Como si estuvieras en una llamada o cara a cara. Fluido, con pausas marcadas con [pausa]. Incluye las 3 preguntas de rapport, apertura, presentación, prueba, manejo de cada objeción y cierre duro. El vendedor debe poder leerlo y decir: "así es exactamente como yo hablaría."`
 
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
   const model = genAI.getGenerativeModel({
     model: 'gemini-2.0-flash',
     generationConfig: {
